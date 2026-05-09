@@ -17,6 +17,10 @@ declare global {
       getCurrentSession: () => Promise<any>;
 
       getSegments: (workSessionId: number) => Promise<any[]>;
+
+      createTask: (name: string) => Promise<number>;
+
+      getTasks: () => Promise<any[]>;
     };
   }
 }

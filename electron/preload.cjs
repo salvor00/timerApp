@@ -13,4 +13,8 @@ contextBridge.exposeInMainWorld("timer", {
 
   getSegments: (workSessionId) =>
     ipcRenderer.invoke("get-segments", workSessionId),
+
+  createTask: (name) => ipcRenderer.invoke("create-task", name),
+
+  getTasks: () => ipcRenderer.invoke("get-tasks"),
 });

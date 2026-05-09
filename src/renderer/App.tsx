@@ -1,43 +1,137 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { useTimerStore } from "./store/timerStore";
 
-import { calculateElapsed } from "./utils/time";
+import CurrentSessionCard from "./components/CurrentSessionCard";
 
 function App() {
-  const currentSession = useTimerStore((state) => state.currentSession);
+  const [tasks, setTasks] = useState<any[]>([]);
 
-  const elapsed = useTimerStore((state) => state.elapsed);
+  const [name, setName] = useState("");
 
-  const setElapsed = useTimerStore((state) => state.setElapsed);
+  const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
 
-  useEffect(() => {
-    if (!currentSession) {
+  const [description, setDescription] = useState("");
+
+  const setCurrentSession = useTimerStore((state) => state.setCurrentSession);
+
+  async function loadTasks() {
+    const data = await window.timer.getTasks();
+
+    setTasks(data);
+  }
+
+  async function handleCreateTask() {
+    if (!name.trim()) {
       return;
     }
 
-    const sessionId = currentSession.id;
+    await window.timer.createTask(name);
 
-    async function updateElapsed() {
-      const segments = await window.timer.getSegments(sessionId);
+    setName("");
 
-      const value = calculateElapsed(segments);
+    loadTasks();
+  }
 
-      setElapsed(value);
+  async function handleStartWorkSession() {
+    if (!selectedTaskId) {
+      return;
     }
 
-    updateElapsed();
+    if (!description.trim()) {
+      return;
+    }
 
-    const interval = setInterval(updateElapsed, 1000);
+    const workSessionId = await window.timer.startWorkSession({
+      taskId: selectedTaskId,
 
-    return () => {
-      clearInterval(interval);
-    };
-  }, [currentSession, setElapsed]);
+      description,
+    });
+
+    setCurrentSession({
+      id: workSessionId,
+      taskId: selectedTaskId,
+      description,
+      status: "running",
+    });
+
+    setDescription("");
+  }
+
+  useEffect(() => {
+    loadTasks();
+  }, []);
 
   return (
-    <div>
-      <h1>{Math.floor(elapsed / 1000)}</h1>
+    <div
+      style={{
+        padding: "24px",
+      }}
+    >
+      <CurrentSessionCard />
+
+      <h1>Task List</h1>
+
+      {/* Task 생성 */}
+
+      <div
+        style={{
+          marginBottom: "24px",
+        }}
+      >
+        <input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="새 Task 이름"
+        />
+
+        <button onClick={handleCreateTask}>Create Task</button>
+      </div>
+
+      {/* Task 목록 */}
+
+      <ul
+        style={{
+          marginBottom: "24px",
+        }}
+      >
+        {tasks.map((task) => (
+          <li
+            key={task.id}
+            onClick={() => setSelectedTaskId(task.id)}
+            style={{
+              cursor: "pointer",
+
+              padding: "8px",
+
+              border:
+                selectedTaskId === task.id
+                  ? "2px solid blue"
+                  : "1px solid gray",
+
+              marginBottom: "8px",
+            }}
+          >
+            {task.name}
+          </li>
+        ))}
+      </ul>
+
+      {/* 선택된 Task */}
+
+      {selectedTaskId && (
+        <div>
+          <h2>WorkSession Start</h2>
+
+          <input
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="현재 작업 내용 입력"
+          />
+
+          <button onClick={handleStartWorkSession}>Start WorkSession</button>
+        </div>
+      )}
     </div>
   );
 }
