@@ -1,18 +1,45 @@
-export default function App() {
-    const handleClick = async () => {
-        // @ts-ignore
-        await window.api.startTimer({ taskId: 1 })
+import { useEffect } from "react";
+
+import { useTimerStore } from "./store/timerStore";
+
+import { calculateElapsed } from "./utils/time";
+
+function App() {
+  const currentSession = useTimerStore((state) => state.currentSession);
+
+  const elapsed = useTimerStore((state) => state.elapsed);
+
+  const setElapsed = useTimerStore((state) => state.setElapsed);
+
+  useEffect(() => {
+    if (!currentSession) {
+      return;
     }
 
-    return (
-        <div className="p-10">
-            <h1 className="text-2xl font-bold">Timer App</h1>
-            <button
-                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-                onClick={handleClick}
-            >
-                Start Timer
-            </button>
-        </div>
-    )
+    const sessionId = currentSession.id;
+
+    async function updateElapsed() {
+      const segments = await window.timer.getSegments(sessionId);
+
+      const value = calculateElapsed(segments);
+
+      setElapsed(value);
+    }
+
+    updateElapsed();
+
+    const interval = setInterval(updateElapsed, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [currentSession, setElapsed]);
+
+  return (
+    <div>
+      <h1>{Math.floor(elapsed / 1000)}</h1>
+    </div>
+  );
 }
+
+export default App;

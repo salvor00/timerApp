@@ -10,4 +10,7 @@ contextBridge.exposeInMainWorld("timer", {
   endWorkSession: (id) => ipcRenderer.invoke("end-work-session", id),
 
   getCurrentSession: () => ipcRenderer.invoke("get-current-session"),
+
+  getSegments: (workSessionId) =>
+    ipcRenderer.invoke("get-segments", workSessionId),
 });

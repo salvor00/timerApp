@@ -86,10 +86,15 @@ function getCurrentSession() {
   return WorkSessionRepository.findCurrentSession();
 }
 
+function getSegments(workSessionId) {
+  return SegmentRepository.findByWorkSessionId(workSessionId);
+}
+
 module.exports = {
   startWorkSession,
   pauseWorkSession,
   getCurrentSession,
   resumeWorkSession,
   endWorkSession,
+  getSegments,
 };

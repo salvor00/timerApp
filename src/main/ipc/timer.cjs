@@ -22,6 +22,10 @@ function registerTimerIpc() {
   ipcMain.handle("get-current-session", async () => {
     return TimerService.getCurrentSession();
   });
+
+  ipcMain.handle("get-segments", async (_, workSessionId) => {
+    return TimerService.getSegments(workSessionId);
+  });
 }
 
 module.exports = {
