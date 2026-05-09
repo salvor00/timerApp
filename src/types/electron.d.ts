@@ -21,6 +21,8 @@ declare global {
       createTask: (name: string) => Promise<number>;
 
       getTasks: () => Promise<any[]>;
+
+      getWorkSessionsByTask: (taskId: number) => Promise<any[]>;
     };
   }
 }

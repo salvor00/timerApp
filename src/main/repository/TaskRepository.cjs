@@ -1,6 +1,6 @@
 // src/main/repository/TaskRepository.cjs
 
-const db = require("../db/database");
+const db = require("../db/database.cjs");
 
 function createTask(name) {
   const stmt = db.prepare(`

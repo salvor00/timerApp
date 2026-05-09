@@ -1,6 +1,6 @@
 const { ipcMain } = require("electron");
 
-const TimerService = require("../services/TimerService");
+const TimerService = require("../services/TimerService.cjs");
 
 function registerTimerIpc() {
   ipcMain.handle("start-work-session", async (_, data) => {

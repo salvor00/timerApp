@@ -1,0 +1,1 @@
+{"root":["./src/renderer/app.tsx","./src/renderer/main.tsx","./src/renderer/components/currentsessioncard.tsx","./src/renderer/components/sessiontimeline.tsx","./src/renderer/components/tasksidebar.tsx","./src/renderer/store/timerstore.ts","./src/renderer/utils/time.ts","./src/types/electron.d.ts"],"version":"5.9.3"}

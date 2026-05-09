@@ -1,6 +1,6 @@
 // src/main/repository/WorkSessionRepository.cjs
 
-const db = require("../db/database");
+const db = require("../db/database.cjs");
 
 function createWorkSession(taskId, description) {
   const stmt = db.prepare(`
@@ -99,9 +99,15 @@ function findByTaskId(taskId) {
   return db
     .prepare(
       `
-    SELECT *
+    SELECT
+      work_sessions.*,
+      MIN(segments.start_time) AS start_time,
+      MAX(segments.end_time) AS end_time
     FROM work_sessions
-    WHERE task_id = ?
+    LEFT JOIN segments
+      ON segments.work_session_id = work_sessions.id
+    WHERE work_sessions.task_id = ?
+    GROUP BY work_sessions.id
     ORDER BY start_time DESC
   `
     )

@@ -1,7 +1,9 @@
 const { app, BrowserWindow } = require("electron");
 const path = require("path");
 const { registerTimerIpc } = require("./ipc/timer.cjs");
+const { registerTaskIpc } = require("./ipc/task.cjs");
 const { initDB } = require("./db/init.cjs");
+const TimerService = require("./services/TimerService.cjs");
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -23,6 +25,7 @@ app.whenReady().then(() => {
   initDB();
   createWindow();
   registerTimerIpc();
+  registerTaskIpc();
 });
 
 app.on("before-quit", () => {

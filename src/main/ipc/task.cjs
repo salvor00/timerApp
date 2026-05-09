@@ -1,6 +1,6 @@
 const { ipcMain } = require("electron");
 
-const TaskService = require("../services/TaskService");
+const TaskService = require("../services/TaskService.cjs");
 
 function registerTaskIpc() {
   ipcMain.handle("create-task", async (_, name) => {

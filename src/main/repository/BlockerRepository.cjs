@@ -1,6 +1,6 @@
 // src/main/repository/BlockerRepository.cjs
 
-const db = require("../db/database");
+const db = require("../db/database.cjs");
 
 function createBlocker(workSessionId) {
   const stmt = db.prepare(`

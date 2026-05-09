@@ -1,6 +1,6 @@
 // src/main/repository/SegmentRepository.cjs
 
-const db = require("../db/database");
+const db = require("../db/database.cjs");
 
 function startSegment(workSessionId) {
   const stmt = db.prepare(`

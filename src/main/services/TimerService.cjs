@@ -1,21 +1,5 @@
-const WorkSessionRepository = require("../repository/WorkSessionRepository");
-const SegmentRepository = require("../repository/SegmentRepository");
-
-function pauseRunningSession() {
-  const runningSession = WorkSessionRepository.findRunningSession();
-
-  if (!runningSession) {
-    return;
-  }
-
-  const openSegment = SegmentRepository.findOpenSegment(runningSession.id);
-
-  if (openSegment) {
-    SegmentRepository.endSegment(openSegment.id);
-  }
-
-  WorkSessionRepository.updateStatus(runningSession.id, "paused");
-}
+const WorkSessionRepository = require("../repository/WorkSessionRepository.cjs");
+const SegmentRepository = require("../repository/SegmentRepository.cjs");
 
 function startWorkSession(taskId, description) {
   // single running timer 보장

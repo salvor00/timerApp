@@ -1,4 +1,4 @@
-const TaskRepository = require("../repository/TaskRepository");
+const TaskRepository = require("../repository/TaskRepository.cjs");
 
 function createTask(name) {
   return TaskRepository.createTask(name);

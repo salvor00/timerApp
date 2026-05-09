@@ -21,8 +21,10 @@ export default function SessionTimeline({ taskId }: Props) {
       return;
     }
 
+    const currentTaskId = taskId;
+
     async function load() {
-      const data = await window.timer.getWorkSessionsByTask(taskId);
+      const data = await window.timer.getWorkSessionsByTask(currentTaskId);
 
       setSessions(data);
     }
