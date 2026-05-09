@@ -46,10 +46,8 @@ export default function CurrentSessionCard() {
       setElapsed(value);
     }
 
-    // 최초 즉시 계산
     updateElapsed();
 
-    // 이후 1초마다 갱신
     const interval = setInterval(updateElapsed, 1000);
 
     return () => {
@@ -58,7 +56,26 @@ export default function CurrentSessionCard() {
   }, [currentSession?.id, currentSession?.status]);
 
   if (!currentSession) {
-    return <div>No Active Session</div>;
+    return (
+      <div
+        className="
+          rounded-2xl
+          border
+          border-slate-800
+          bg-slate-900
+          p-6
+          mb-6
+        "
+      >
+        <p
+          className="
+            text-slate-400
+          "
+        >
+          No Active Session
+        </p>
+      </div>
+    );
   }
 
   async function handlePause() {
@@ -107,40 +124,131 @@ export default function CurrentSessionCard() {
 
   return (
     <div
-      style={{
-        border: "1px solid gray",
-
-        padding: "16px",
-
-        marginBottom: "24px",
-
-        borderRadius: "12px",
-      }}
+      className="
+        rounded-2xl
+        border
+        border-slate-800
+        bg-slate-900
+        p-6
+        mb-6
+        shadow-xl
+      "
     >
-      <h2>Current Session</h2>
-
-      <p>Description: {currentSession.description}</p>
-
-      <p>Status: {currentSession.status}</p>
-
-      <h1>{formatTime(elapsed)}</h1>
-
-      {currentSession.status === "running" && (
-        <button onClick={handlePause}>Pause</button>
-      )}
-
-      {currentSession.status === "paused" && (
-        <button onClick={handleResume}>Resume</button>
-      )}
-
-      <button
-        onClick={handleEnd}
-        style={{
-          marginLeft: "8px",
-        }}
+      <div
+        className="
+          flex
+          items-center
+          justify-between
+          mb-4
+        "
       >
-        End
-      </button>
+        <div>
+          <p
+            className="
+              text-sm
+              text-slate-400
+              mb-1
+            "
+          >
+            Current Session
+          </p>
+
+          <h2
+            className="
+              text-2xl
+              font-bold
+            "
+          >
+            {currentSession.description}
+          </h2>
+        </div>
+
+        <div>
+          <span
+            className={`
+              text-xs
+              px-3
+              py-1
+              rounded-full
+              font-semibold
+              ${
+                currentSession.status === "running"
+                  ? "bg-green-500/20 text-green-400"
+                  : "bg-yellow-500/20 text-yellow-400"
+              }
+            `}
+          >
+            {currentSession.status}
+          </span>
+        </div>
+      </div>
+
+      <div
+        className="
+          text-6xl
+          font-black
+          tracking-tight
+          mb-6
+        "
+      >
+        {formatTime(elapsed)}
+      </div>
+
+      <div
+        className="
+          flex
+          gap-3
+        "
+      >
+        {currentSession.status === "running" && (
+          <button
+            onClick={handlePause}
+            className="
+              px-4
+              py-2
+              rounded-xl
+              bg-yellow-500
+              text-black
+              font-semibold
+              hover:opacity-90
+            "
+          >
+            Pause
+          </button>
+        )}
+
+        {currentSession.status === "paused" && (
+          <button
+            onClick={handleResume}
+            className="
+              px-4
+              py-2
+              rounded-xl
+              bg-green-500
+              text-black
+              font-semibold
+              hover:opacity-90
+            "
+          >
+            Resume
+          </button>
+        )}
+
+        <button
+          onClick={handleEnd}
+          className="
+            px-4
+            py-2
+            rounded-xl
+            bg-red-500
+            text-white
+            font-semibold
+            hover:opacity-90
+          "
+        >
+          End
+        </button>
+      </div>
     </div>
   );
 }
