@@ -1,4 +1,4 @@
-const db = require("./database.cjs")
+const db = require("./database.cjs");
 
 function initDB() {
   db.exec(`
@@ -12,6 +12,7 @@ function initDB() {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       task_id INTEGER NOT NULL,
       description TEXT NOT NULL,
+      status TEXT NOT NULL,
       created_at INTEGER NOT NULL,
       FOREIGN KEY (task_id) REFERENCES tasks(id)
     );
@@ -30,7 +31,7 @@ function initDB() {
       created_at INTEGER NOT NULL,
       FOREIGN KEY (work_session_id) REFERENCES work_sessions(id)
     );
-  `)
+  `);
 }
 
-module.exports = { initDB }
+module.exports = { initDB };
