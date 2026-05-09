@@ -1,5 +1,11 @@
-const { contextBridge, ipcRenderer } = require("electron")
+const { contextBridge, ipcRenderer } = require("electron");
 
-contextBridge.exposeInMainWorld("api", {
-    startTimer: (data) => ipcRenderer.invoke("start-timer", data),
-})
+contextBridge.exposeInMainWorld("timer", {
+  startWorkSession: (data) => ipcRenderer.invoke("start-work-session", data),
+
+  pauseWorkSession: (id) => ipcRenderer.invoke("pause-work-session", id),
+
+  resumeWorkSession: (id) => ipcRenderer.invoke("resume-work-session", id),
+
+  endWorkSession: (id) => ipcRenderer.invoke("end-work-session", id),
+});
