@@ -81,11 +81,26 @@ function endSession(id) {
     .run(id);
 }
 
+function findCurrentSession() {
+  return db
+    .prepare(
+      `
+    SELECT *
+    FROM work_sessions
+    WHERE status IN ('running', 'paused')
+    ORDER BY created_at DESC
+    LIMIT 1
+  `
+    )
+    .get();
+}
+
 module.exports = {
   createWorkSession,
   findById,
   findRunningSession,
   findPausedByTaskId,
+  findCurrentSession,
   updateStatus,
   endSession,
 };

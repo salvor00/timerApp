@@ -18,6 +18,10 @@ function registerTimerIpc() {
   ipcMain.handle("end-work-session", async (_, workSessionId) => {
     return TimerService.endWorkSession(workSessionId);
   });
+
+  ipcMain.handle("get-current-session", async () => {
+    return TimerService.getCurrentSession();
+  });
 }
 
 module.exports = {

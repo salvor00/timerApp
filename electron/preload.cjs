@@ -8,4 +8,6 @@ contextBridge.exposeInMainWorld("timer", {
   resumeWorkSession: (id) => ipcRenderer.invoke("resume-work-session", id),
 
   endWorkSession: (id) => ipcRenderer.invoke("end-work-session", id),
+
+  getCurrentSession: () => ipcRenderer.invoke("get-current-session"),
 });

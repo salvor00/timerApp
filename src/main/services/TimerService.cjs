@@ -82,9 +82,14 @@ function endWorkSession(workSessionId) {
   WorkSessionRepository.updateStatus(workSessionId, "ended");
 }
 
+function getCurrentSession() {
+  return WorkSessionRepository.findCurrentSession();
+}
+
 module.exports = {
   startWorkSession,
   pauseWorkSession,
+  getCurrentSession,
   resumeWorkSession,
   endWorkSession,
 };
