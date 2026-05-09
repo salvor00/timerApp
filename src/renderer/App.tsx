@@ -4,6 +4,10 @@ import { useTimerStore } from "./store/timerStore";
 
 import CurrentSessionCard from "./components/CurrentSessionCard";
 
+import TaskSidebar from "./components/TaskSidebar";
+
+import SessionTimeline from "./components/SessionTimeline";
+
 function App() {
   const [tasks, setTasks] = useState<any[]>([]);
 
@@ -50,8 +54,11 @@ function App() {
 
     setCurrentSession({
       id: workSessionId,
+
       taskId: selectedTaskId,
+
       description,
+
       status: "running",
     });
 
@@ -80,74 +87,97 @@ function App() {
 
   return (
     <div
-      style={{
-        padding: "24px",
-      }}
+      className="
+        flex
+        bg-slate-950
+        text-white
+        min-h-screen
+      "
     >
-      <CurrentSessionCard />
+      <TaskSidebar
+        tasks={tasks}
+        selectedTaskId={selectedTaskId}
+        setSelectedTaskId={setSelectedTaskId}
+        name={name}
+        setName={setName}
+        handleCreateTask={handleCreateTask}
+      />
 
-      <h1>Task List</h1>
-
-      {/* Task 생성 */}
-
-      <div
-        style={{
-          marginBottom: "24px",
-        }}
+      <main
+        className="
+          flex-1
+          p-8
+          overflow-y-auto
+        "
       >
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="새 Task 이름"
-        />
+        <CurrentSessionCard />
 
-        <button onClick={handleCreateTask}>Create Task</button>
-      </div>
+        {selectedTaskId && (
+          <>
+            <div
+              className="
+                bg-slate-900
+                border
+                border-slate-800
+                rounded-2xl
+                p-6
+              "
+            >
+              <h2
+                className="
+                  text-xl
+                  font-bold
+                  mb-4
+                "
+              >
+                Start WorkSession
+              </h2>
 
-      {/* Task 목록 */}
+              <div
+                className="
+                  flex
+                  gap-3
+                "
+              >
+                <input
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="
+                    현재 작업 내용 입력
+                  "
+                  className="
+                    flex-1
+                    bg-slate-950
+                    border
+                    border-slate-700
+                    rounded-xl
+                    px-4
+                    py-3
+                    outline-none
+                  "
+                />
 
-      <ul
-        style={{
-          marginBottom: "24px",
-        }}
-      >
-        {tasks.map((task) => (
-          <li
-            key={task.id}
-            onClick={() => setSelectedTaskId(task.id)}
-            style={{
-              cursor: "pointer",
+                <button
+                  onClick={handleStartWorkSession}
+                  className="
+                    px-5
+                    py-3
+                    rounded-xl
+                    bg-green-500
+                    text-black
+                    font-bold
+                    hover:opacity-90
+                  "
+                >
+                  Start
+                </button>
+              </div>
+            </div>
 
-              padding: "8px",
-
-              border:
-                selectedTaskId === task.id
-                  ? "2px solid blue"
-                  : "1px solid gray",
-
-              marginBottom: "8px",
-            }}
-          >
-            {task.name}
-          </li>
-        ))}
-      </ul>
-
-      {/* 선택된 Task */}
-
-      {selectedTaskId && (
-        <div>
-          <h2>WorkSession Start</h2>
-
-          <input
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="현재 작업 내용 입력"
-          />
-
-          <button onClick={handleStartWorkSession}>Start WorkSession</button>
-        </div>
-      )}
+            <SessionTimeline taskId={selectedTaskId} />
+          </>
+        )}
+      </main>
     </div>
   );
 }

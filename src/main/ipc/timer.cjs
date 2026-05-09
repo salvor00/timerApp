@@ -26,6 +26,14 @@ function registerTimerIpc() {
   ipcMain.handle("get-segments", async (_, workSessionId) => {
     return TimerService.getSegments(workSessionId);
   });
+
+  ipcMain.handle(
+    "getWorkSessionsByTask",
+
+    (event, taskId) => {
+      return TimerService.getWorkSessionsByTask(taskId);
+    }
+  );
 }
 
 module.exports = {

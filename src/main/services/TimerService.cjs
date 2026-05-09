@@ -100,6 +100,10 @@ async function pauseRunningSession() {
   pauseWorkSession(session.id);
 }
 
+function getWorkSessionsByTask(taskId) {
+  return WorkSessionRepository.findByTaskId(taskId);
+}
+
 module.exports = {
   startWorkSession,
   pauseWorkSession,
@@ -108,4 +112,5 @@ module.exports = {
   endWorkSession,
   getSegments,
   pauseRunningSession,
+  getWorkSessionsByTask,
 };

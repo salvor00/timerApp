@@ -95,9 +95,23 @@ function findCurrentSession() {
     .get();
 }
 
+function findByTaskId(taskId) {
+  return db
+    .prepare(
+      `
+    SELECT *
+    FROM work_sessions
+    WHERE task_id = ?
+    ORDER BY start_time DESC
+  `
+    )
+    .all(taskId);
+}
+
 module.exports = {
   createWorkSession,
   findById,
+  findByTaskId,
   findRunningSession,
   findPausedByTaskId,
   findCurrentSession,
