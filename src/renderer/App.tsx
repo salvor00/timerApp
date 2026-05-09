@@ -60,6 +60,22 @@ function App() {
 
   useEffect(() => {
     loadTasks();
+
+    async function recoverSession() {
+      const session = await window.timer.getCurrentSession();
+
+      if (!session) {
+        return;
+      }
+
+      const shouldResume = window.confirm("이전 WorkSession을 복구할까요?");
+
+      if (shouldResume) {
+        setCurrentSession(session);
+      }
+    }
+
+    recoverSession();
   }, []);
 
   return (

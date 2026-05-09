@@ -90,6 +90,16 @@ function getSegments(workSessionId) {
   return SegmentRepository.findByWorkSessionId(workSessionId);
 }
 
+async function pauseRunningSession() {
+  const session = WorkSessionRepository.findRunningSession();
+
+  if (!session) {
+    return;
+  }
+
+  pauseWorkSession(session.id);
+}
+
 module.exports = {
   startWorkSession,
   pauseWorkSession,
@@ -97,4 +107,5 @@ module.exports = {
   resumeWorkSession,
   endWorkSession,
   getSegments,
+  pauseRunningSession,
 };
