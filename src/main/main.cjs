@@ -1,6 +1,7 @@
 const { app, BrowserWindow } = require("electron")
 const path = require("path")
 const { registerTimerIpc } = require("./ipc/timer.cjs")
+const { initDB } = require("./db/init.cjs")
 
 function createWindow() {
     const win = new BrowserWindow({
@@ -11,8 +12,6 @@ function createWindow() {
         },
     })
 
-    // Register IPC handlers
-    registerTimerIpc()
 
     if (process.env.NODE_ENV === "development") {
         win.loadURL("http://localhost:5173")
@@ -21,7 +20,11 @@ function createWindow() {
     }
 }
 
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+    initDB()
+    createWindow()
+    registerTimerIpc()
+})
 
 app.on("window-all-closed", () => {
     if (process.platform !== "darwin") {
